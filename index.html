@@ -6,7 +6,7 @@
 <title>Weer · Zwolle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200;9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -15,11 +15,11 @@
     overflow: hidden;
     font-family: 'Outfit', system-ui, sans-serif;
     color: #ffffff;
-    background: #1a1f2e;
+    background: #0c1018;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== Achtergrond: hoge-res weerfoto ===== */
+  /* ============ Achtergrond ============ */
   #bg {
     position: fixed;
     inset: 0;
@@ -27,35 +27,18 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #1a1f2e;
+    background-color: #0c1018;
   }
-  /* Fallback gradients per weertype, geactiveerd via class op #bg */
-  #bg.fallback-clear-day      { background: linear-gradient(180deg, #5dade2 0%, #f5c989 70%, #ec7063 100%); }
-  #bg.fallback-clear-night    { background: linear-gradient(180deg, #0b1735 0%, #1f2a48 50%, #3a4768 100%); }
-  #bg.fallback-cloudy-day     { background: linear-gradient(180deg, #6c7a89 0%, #8a98a8 60%, #b4bcc5 100%); }
-  #bg.fallback-cloudy-night   { background: linear-gradient(180deg, #1c2230 0%, #303849 60%, #4a5468 100%); }
-  #bg.fallback-rain           { background: linear-gradient(180deg, #2c3e50 0%, #4a6075 70%, #5a7088 100%); }
-  #bg.fallback-snow           { background: linear-gradient(180deg, #b8c6d4 0%, #d8e2ed 60%, #e9eef5 100%); }
-  #bg.fallback-fog            { background: linear-gradient(180deg, #aab1b9 0%, #c5cad0 60%, #dadde2 100%); }
-  #bg.fallback-thunder        { background: linear-gradient(180deg, #1a1d2e 0%, #2c2f47 60%, #3d4263 100%); }
 
-  /* Editorial overlay: donker boven & onder, scherp leesbaar */
-  #overlay-top, #overlay-bottom {
+  #overlay-top, #overlay-mid, #overlay-bottom {
     position: fixed;
     left: 0; right: 0;
     z-index: -1;
     pointer-events: none;
   }
-  #overlay-top {
-    top: 0;
-    height: 35vh;
-    background: linear-gradient(180deg, rgba(10,12,20,0.62) 0%, rgba(10,12,20,0.0) 100%);
-  }
-  #overlay-bottom {
-    bottom: 0;
-    height: 55vh;
-    background: linear-gradient(0deg, rgba(10,12,20,0.85) 0%, rgba(10,12,20,0.55) 50%, rgba(10,12,20,0.0) 100%);
-  }
+  #overlay-top    { top: 0;    height: 30vh; background: linear-gradient(180deg, rgba(8,10,18,0.62) 0%, rgba(8,10,18,0.0) 100%); }
+  #overlay-mid    { top: 25vh; height: 50vh; background: radial-gradient(ellipse at center, rgba(8,10,18,0.30) 0%, rgba(8,10,18,0.0) 70%); }
+  #overlay-bottom { bottom: 0; height: 60vh; background: linear-gradient(0deg, rgba(8,10,18,0.88) 0%, rgba(8,10,18,0.55) 50%, rgba(8,10,18,0.0) 100%); }
 
   .app {
     position: relative;
@@ -63,59 +46,64 @@
     height: 100vh;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    padding: 38px 56px 32px;
+    padding: 32px 56px 28px;
   }
 
-  /* ============ TOP BAR ============ */
+  /* ================= TOP BAR ================= */
   .topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 17px;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: rgba(255,255,255,0.92);
+    color: rgba(255,255,255,0.95);
   }
   .topbar .location {
     display: flex;
     align-items: center;
     gap: 12px;
     font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: none;
+    font-weight: 500;
+    letter-spacing: 0.3px;
   }
-  .topbar .location svg { width: 20px; height: 20px; opacity: 0.85; }
+  .topbar .location svg { width: 20px; height: 20px; opacity: 0.8; }
   .topbar .clock {
     display: flex;
     align-items: center;
     gap: 22px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
   }
   .topbar .clock .time {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    text-transform: none;
     color: #fff;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
   }
   .topbar .clock .dot {
     display: inline-block;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.5);
   }
 
-  /* ============ HERO (huidig weer) ============ */
+  /* ================= HERO ================= */
   .hero {
     align-self: center;
-    max-width: 1400px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 60px;
+    align-items: center;
   }
+  .hero-main { min-width: 0; }
   .hero-eyebrow {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -131,7 +119,9 @@
     background: rgba(255,255,255,0.55);
   }
   .hero-condition {
-    font-size: 78px;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    font-size: 86px;
     font-weight: 300;
     line-height: 1;
     letter-spacing: -2px;
@@ -142,71 +132,181 @@
   .hero-temp {
     display: flex;
     align-items: flex-start;
-    gap: 0;
     line-height: 0.85;
-    margin-top: -10px;
+    margin-top: -4px;
   }
   .hero-temp .num {
-    font-size: 320px;
-    font-weight: 300;
-    letter-spacing: -14px;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: 280px;
+    font-weight: 200;
+    letter-spacing: -10px;
     color: #fff;
-    text-shadow: 0 4px 60px rgba(0,0,0,0.45);
+    text-shadow: 0 6px 60px rgba(0,0,0,0.45);
   }
   .hero-temp .deg {
-    font-size: 120px;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-size: 110px;
     font-weight: 200;
-    margin-top: 28px;
-    margin-left: 10px;
+    margin-top: 22px;
+    margin-left: 8px;
     color: rgba(255,255,255,0.85);
     letter-spacing: -2px;
   }
   .hero-meta {
-    margin-top: 14px;
+    margin-top: 12px;
     display: flex;
     gap: 32px;
     font-size: 22px;
     font-weight: 400;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.88);
+    flex-wrap: wrap;
   }
   .hero-meta .label {
     color: rgba(255,255,255,0.55);
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     margin-right: 8px;
   }
-  .hero-meta .item { display: flex; align-items: center; }
 
-  /* ============ BOTTOM PANEL ============ */
+  /* ============ Sparkline (24u temp) ============ */
+  .hero-sparkline {
+    margin-top: 22px;
+    max-width: 760px;
+  }
+  .spark-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .spark-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .spark-range {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+  }
+  .spark-range b { color: #fff; font-weight: 600; }
+  #sparkSvg {
+    width: 100%;
+    height: 90px;
+    display: block;
+  }
+  .spark-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ============ 5-DAAGSE FORECAST (rechts in hero) ============ */
+  .hero-forecast {
+    width: 360px;
+    border-left: 1px solid rgba(255,255,255,0.16);
+    padding-left: 32px;
+  }
+  .hf-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+  }
+  .hf-list { display: flex; flex-direction: column; }
+  .hf-row {
+    display: grid;
+    grid-template-columns: 56px 32px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+  .hf-row:last-child { border-bottom: none; }
+  .hf-day {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+  }
+  .hf-icon {
+    width: 28px;
+    height: 28px;
+    color: #fff;
+  }
+  .hf-icon svg { width: 100%; height: 100%; }
+  .hf-prob {
+    font-size: 12px;
+    color: rgba(150,200,255,0.95);
+    font-weight: 500;
+    text-align: right;
+  }
+  .hf-temps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .hf-temps .tmax { color: #fff; }
+  .hf-temps .tmin { color: rgba(255,255,255,0.55); }
+  .hf-bar {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    overflow: hidden;
+    position: relative;
+    min-width: 70px;
+  }
+  .hf-bar-fill {
+    position: absolute;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6cb6ff 0%, #ffd866 60%, #ff8b6b 100%);
+  }
+
+  /* ================= BOTTOM ================= */
   .bottombar {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding-top: 26px;
+    gap: 18px;
+    padding-top: 20px;
   }
 
-  /* Hourly forecast — geen kaarten, gewoon strakke kolommen */
   .hourly {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     border-top: 1px solid rgba(255,255,255,0.18);
     border-bottom: 1px solid rgba(255,255,255,0.18);
-    padding: 18px 0;
+    padding: 16px 0;
   }
   .h-cell {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     padding: 0 8px;
     border-right: 1px solid rgba(255,255,255,0.10);
     text-align: center;
   }
   .h-cell:last-child { border-right: none; }
   .h-time {
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 1.6px;
     text-transform: uppercase;
     font-weight: 600;
@@ -216,43 +316,40 @@
   .h-cell.now .h-time::before {
     content: "● ";
     color: #ffd866;
-    font-size: 10px;
+    font-size: 9px;
     margin-right: 4px;
     vertical-align: middle;
   }
-  .h-icon {
-    width: 38px;
-    height: 38px;
-    color: #fff;
-  }
+  .h-icon { width: 34px; height: 34px; color: #fff; }
   .h-icon svg { width: 100%; height: 100%; }
   .h-temp {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 400;
     color: #fff;
     letter-spacing: -0.5px;
   }
   .h-prob {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    color: rgba(150,200,255,0.9);
+    color: rgba(150,200,255,0.95);
     letter-spacing: 0.5px;
     min-height: 14px;
   }
 
-  /* Stats — 6 kolommen, geen kaarten, gescheiden door dunne lijntjes */
   .stats {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
   }
   .stat {
-    padding: 6px 22px;
+    padding: 4px 22px;
     border-right: 1px solid rgba(255,255,255,0.10);
   }
   .stat:first-child { padding-left: 0; }
   .stat:last-child  { border-right: none; padding-right: 0; }
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 2.4px;
     text-transform: uppercase;
@@ -264,8 +361,10 @@
   }
   .stat-label svg { width: 14px; height: 14px; opacity: 0.85; }
   .stat-value {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
     font-size: 38px;
-    font-weight: 500;
+    font-weight: 300;
     color: #fff;
     line-height: 1;
     letter-spacing: -0.5px;
@@ -274,33 +373,26 @@
     gap: 6px;
   }
   .stat-value .unit {
-    font-size: 18px;
-    font-weight: 400;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
     color: rgba(255,255,255,0.7);
     letter-spacing: 0;
   }
   .stat-foot {
-    margin-top: 10px;
-    font-size: 13px;
+    margin-top: 8px;
+    font-size: 12px;
     font-weight: 400;
     color: rgba(255,255,255,0.65);
-    letter-spacing: 0.4px;
     line-height: 1.4;
-    min-height: 18px;
+    min-height: 16px;
   }
 
   /* Wind specials */
-  .wind-row {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
+  .wind-row { display: flex; align-items: baseline; gap: 8px; }
   .wind-arrow {
-    width: 22px;
-    height: 22px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
     color: #fff;
   }
   .wind-arrow svg { width: 100%; height: 100%; }
@@ -311,8 +403,7 @@
     height: 4px;
     background: rgba(255,255,255,0.18);
     border-radius: 999px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin: 6px 0 6px;
   }
   .daylight-fill {
     position: absolute;
@@ -323,25 +414,23 @@
   .daylight-times {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 11px;
     color: rgba(255,255,255,0.65);
     letter-spacing: 0.5px;
     font-weight: 500;
   }
   .daylight-value {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
     font-size: 28px;
-    font-weight: 500;
+    font-weight: 400;
     color: #fff;
     letter-spacing: -0.3px;
     line-height: 1;
   }
 
   /* AQ */
-  .aq-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .aq-row { display: flex; align-items: center; gap: 12px; }
   .aq-dot {
     width: 14px;
     height: 14px;
@@ -351,7 +440,6 @@
     box-shadow: 0 0 0 4px rgba(46,204,113,0.18);
   }
 
-  /* Error banner */
   .error-banner {
     position: fixed;
     bottom: 14px;
@@ -372,6 +460,7 @@
 
 <div id="bg"></div>
 <div id="overlay-top"></div>
+<div id="overlay-mid"></div>
 <div id="overlay-bottom"></div>
 
 <div class="app">
@@ -391,31 +480,49 @@
 
   <!-- ========== HERO ========== -->
   <section class="hero">
-    <div class="hero-eyebrow">
-      <span class="pip"></span>
-      <span>Huidig weer</span>
-      <span class="pip"></span>
-      <span id="conditionEyebrow">—</span>
+    <div class="hero-main">
+      <div class="hero-eyebrow">
+        <span class="pip"></span>
+        <span>Huidig weer</span>
+        <span class="pip"></span>
+        <span id="conditionEyebrow">—</span>
+      </div>
+      <div class="hero-condition" id="condition">—</div>
+      <div class="hero-temp">
+        <span class="num" id="tempC">—</span>
+        <span class="deg">°</span>
+      </div>
+      <div class="hero-meta">
+        <div><span class="label">Voelt als</span><span id="feelsLike">—°</span></div>
+        <div><span class="label">Vandaag</span><span id="todayMinMax">— · —</span></div>
+        <div><span class="label">Fahrenheit</span><span id="tempF">—°F</span></div>
+      </div>
+
+      <!-- Sparkline next 24u -->
+      <div class="hero-sparkline">
+        <div class="spark-head">
+          <div class="spark-title">Komende 24 uur</div>
+          <div class="spark-range">Min <b id="spark24min">—°</b> · Max <b id="spark24max">—°</b></div>
+        </div>
+        <svg id="sparkSvg" viewBox="0 0 1000 90" preserveAspectRatio="none"></svg>
+        <div class="spark-axis">
+          <span>nu</span><span>+6u</span><span>+12u</span><span>+18u</span><span>+24u</span>
+        </div>
+      </div>
     </div>
-    <div class="hero-condition" id="condition">—</div>
-    <div class="hero-temp">
-      <span class="num" id="tempC">—</span>
-      <span class="deg">°</span>
-    </div>
-    <div class="hero-meta">
-      <div class="item"><span class="label">Voelt als</span><span id="feelsLike">—°</span></div>
-      <div class="item"><span class="label">Vandaag</span><span id="todayMinMax">— · —</span></div>
-      <div class="item"><span class="label">Fahrenheit</span><span id="tempF">—°F</span></div>
-    </div>
+
+    <!-- 5-daagse forecast -->
+    <aside class="hero-forecast">
+      <div class="hf-title">Volgende 5 dagen</div>
+      <div class="hf-list" id="forecastList"></div>
+    </aside>
   </section>
 
   <!-- ========== BOTTOM ========== -->
   <footer class="bottombar">
 
-    <!-- Hourly -->
     <div class="hourly" id="hourly"></div>
 
-    <!-- Stats -->
     <div class="stats">
 
       <div class="stat">
@@ -479,7 +586,7 @@
         </div>
         <div class="aq-row">
           <span class="aq-dot" id="aqDot"></span>
-          <span class="stat-value" style="font-size:34px;"><span id="aqLabel">—</span></span>
+          <span class="stat-value" style="font-size:30px;"><span id="aqLabel">—</span></span>
         </div>
         <div class="stat-foot">Europese AQI · <span id="aqValue">—</span></div>
       </div>
@@ -492,7 +599,7 @@
 
 <script>
 /* ===================================================================
-   CONFIG — pas hier locatie aan
+   CONFIG
    =================================================================== */
 const CONFIG = {
   latitude:  52.5168,    // Zwolle
@@ -504,21 +611,20 @@ const CONFIG = {
 };
 
 /* ===================================================================
-   ACHTERGRONDFOTO'S — meerdere kandidaten per weertype.
-   Probeert ze in volgorde; als alle falen → CSS gradient fallback.
+   ACHTERGRONDFOTO'S — geverifieerde Unsplash URLs (allemaal HTTP 200)
    =================================================================== */
 const BG_CANDIDATES = {
-  "clear-day": [
+  "clear-day":    [
     "https://images.unsplash.com/photo-1601297183305-6df142704ea2?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1444930694458-01babb71c6a5?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=2400&q=85"
   ],
-  "clear-night": [
-    "https://images.unsplash.com/photo-1532978879514-6cb7d6b1c75f?auto=format&fit=crop&w=2400&q=85",
+  "clear-night":  [
     "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?auto=format&fit=crop&w=2400&q=85",
+    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=2400&q=85"
   ],
-  "cloudy-day": [
+  "cloudy-day":   [
     "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1505322747495-6afdd3b70760?auto=format&fit=crop&w=2400&q=85"
@@ -526,28 +632,40 @@ const BG_CANDIDATES = {
   "cloudy-night": [
     "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1502209524164-acea936639a2?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1532978879514-6cb7d6b1c75f?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=2400&q=85"
   ],
-  "fog": [
+  "fog":          [
     "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1543968996-ee822b8176ba?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=2400&q=85"
   ],
-  "rain": [
+  "rain":         [
     "https://images.unsplash.com/photo-1438449805896-28a666819a20?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1428592953211-077101b2021b?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1493314894560-5c412a56c17c?auto=format&fit=crop&w=2400&q=85"
   ],
-  "snow": [
+  "snow":         [
     "https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1457269449834-928af64c684d?auto=format&fit=crop&w=2400&q=85"
   ],
-  "thunder": [
+  "thunder":      [
     "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1429552077091-836152271555?auto=format&fit=crop&w=2400&q=85",
     "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=2400&q=85"
   ]
+};
+
+/* CSS gradient fallbacks — kicken in zodra een foto faalt */
+const GRADIENTS = {
+  "clear-day":    "linear-gradient(180deg, #4a90c8 0%, #87b4d4 40%, #f5c989 80%, #ec7063 100%)",
+  "clear-night":  "linear-gradient(180deg, #050a1a 0%, #0d1530 40%, #1f2a48 70%, #2a3658 100%)",
+  "cloudy-day":   "linear-gradient(180deg, #3e4a5c 0%, #5a6878 50%, #7e8c9c 100%)",
+  "cloudy-night": "linear-gradient(180deg, #0a0e18 0%, #1c2230 50%, #303849 100%)",
+  "rain":         "linear-gradient(180deg, #1a2535 0%, #2c3e50 50%, #4a6075 100%)",
+  "snow":         "linear-gradient(180deg, #6a7c90 0%, #8e9eb4 50%, #b8c6d4 100%)",
+  "fog":          "linear-gradient(180deg, #5a6068 0%, #7a818a 50%, #9aa1a9 100%)",
+  "thunder":      "linear-gradient(180deg, #08090f 0%, #1a1d2e 50%, #2c2f47 100%)"
 };
 
 /* WMO weercode → label + bg-key + icon-key */
@@ -601,24 +719,26 @@ function fmtMins(mins) {
 function showError(msg) { const e = $("errorBanner"); e.textContent = msg; e.style.display = "block"; }
 function hideError() { $("errorBanner").style.display = "none"; }
 
-/* === Achtergrond laden met fallback ladder === */
+/* === Achtergrond: zet altijd direct gradient, leg foto eroverheen als die laadt === */
 function setBackground(bgKey) {
   const bg = $("bg");
-  // verwijder eerdere fallback-classes
-  bg.className = "";
+  const grad = GRADIENTS[bgKey] || GRADIENTS["cloudy-day"];
+  // Direct gradient zetten — zo zie je altijd iets
+  bg.style.background = grad;
+  bg.style.backgroundSize = "cover";
+  bg.style.backgroundPosition = "center";
+
   const list = BG_CANDIDATES[bgKey] || [];
   function tryNext(i) {
     if (i >= list.length) {
-      // Alle URLs faalden — zet CSS gradient fallback
-      bg.style.backgroundImage = "none";
-      bg.classList.add("fallback-" + bgKey);
-      console.warn("[weer] Alle achtergrondfoto's faalden voor:", bgKey, "— gradient fallback actief.");
+      console.warn("[weer] Alle foto's voor", bgKey, "faalden — gradient blijft staan.");
       return;
     }
     const url = list[i];
     const probe = new Image();
     probe.onload = () => {
-      bg.style.backgroundImage = `url("${url}")`;
+      // Foto bovenop, gradient eronder als second layer (zichtbaar bij transparante delen)
+      bg.style.background = `url("${url}") center/cover no-repeat, ${grad}`;
       console.log("[weer] Achtergrond geladen:", url);
     };
     probe.onerror = () => {
@@ -630,16 +750,16 @@ function setBackground(bgKey) {
   tryNext(0);
 }
 
-/* === Open-Meteo data ophalen === */
+/* === Open-Meteo data === */
 async function fetchAll(lat, lon) {
   const wp = new URLSearchParams({
     latitude: lat, longitude: lon,
     current: "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,visibility,is_day,dew_point_2m",
     hourly: "temperature_2m,weather_code,precipitation_probability,is_day",
-    daily: "sunrise,sunset,temperature_2m_max,temperature_2m_min",
+    daily: "sunrise,sunset,temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max",
     timezone: CONFIG.timezone,
     wind_speed_unit: "kmh",
-    forecast_days: 2
+    forecast_days: 7
   });
   const ap = new URLSearchParams({
     latitude: lat, longitude: lon,
@@ -653,6 +773,104 @@ async function fetchAll(lat, lon) {
   return { weather: w, air: a };
 }
 
+/* === Sparkline: 24u temperatuur === */
+function renderSparkline(temps) {
+  const svg = $("sparkSvg");
+  const W = 1000, H = 90, PAD_X = 8, PAD_Y_TOP = 18, PAD_Y_BOTTOM = 8;
+  const tMin = Math.min(...temps);
+  const tMax = Math.max(...temps);
+  const range = Math.max(1, tMax - tMin);
+
+  const points = temps.map((t, i) => ({
+    x: PAD_X + (i / (temps.length - 1)) * (W - 2 * PAD_X),
+    y: PAD_Y_TOP + (1 - (t - tMin) / range) * (H - PAD_Y_TOP - PAD_Y_BOTTOM),
+    t
+  }));
+
+  // Smooth path via cubic bezier (simple horizontal-tangent smoothing)
+  let pathD = `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
+  for (let i = 1; i < points.length; i++) {
+    const p0 = points[i - 1];
+    const p1 = points[i];
+    const cp1x = p0.x + (p1.x - p0.x) / 2;
+    const cp1y = p0.y;
+    const cp2x = p0.x + (p1.x - p0.x) / 2;
+    const cp2y = p1.y;
+    pathD += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p1.x.toFixed(1)},${p1.y.toFixed(1)}`;
+  }
+  const last = points[points.length - 1];
+  const fillD = `${pathD} L ${last.x.toFixed(1)},${H} L ${points[0].x.toFixed(1)},${H} Z`;
+
+  // Min/max indices
+  const minIdx = temps.indexOf(tMin);
+  const maxIdx = temps.indexOf(tMax);
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(255,216,102,0.45)"/>
+        <stop offset="100%" stop-color="rgba(255,216,102,0)"/>
+      </linearGradient>
+    </defs>
+    <path d="${fillD}" fill="url(#sparkGrad)"/>
+    <path d="${pathD}" stroke="#ffd866" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+      vector-effect="non-scaling-stroke"/>
+    <circle cx="${points[maxIdx].x.toFixed(1)}" cy="${points[maxIdx].y.toFixed(1)}" r="5" fill="#ffd866"/>
+    <text x="${points[maxIdx].x.toFixed(1)}" y="${(points[maxIdx].y - 8).toFixed(1)}" text-anchor="middle"
+      fill="#fff" font-size="14" font-weight="600" font-family="Outfit, sans-serif">${Math.round(tMax)}°</text>
+    <circle cx="${points[minIdx].x.toFixed(1)}" cy="${points[minIdx].y.toFixed(1)}" r="5" fill="#9bd1ff"/>
+    <text x="${points[minIdx].x.toFixed(1)}" y="${(points[minIdx].y + 18).toFixed(1)}" text-anchor="middle"
+      fill="#9bd1ff" font-size="14" font-weight="600" font-family="Outfit, sans-serif">${Math.round(tMin)}°</text>
+  `;
+
+  $("spark24min").textContent = Math.round(tMin) + "°";
+  $("spark24max").textContent = Math.round(tMax) + "°";
+}
+
+/* === 5-daagse forecast === */
+function renderForecast(daily) {
+  const list = $("forecastList");
+  list.innerHTML = "";
+
+  // Globale min/max over 5 dagen voor de balkjes
+  const allMaxes = [], allMins = [];
+  for (let i = 1; i <= 5; i++) {
+    if (daily.temperature_2m_max[i] != null) allMaxes.push(daily.temperature_2m_max[i]);
+    if (daily.temperature_2m_min[i] != null) allMins.push(daily.temperature_2m_min[i]);
+  }
+  const globMin = Math.min(...allMins);
+  const globMax = Math.max(...allMaxes);
+  const globRange = Math.max(1, globMax - globMin);
+
+  for (let i = 1; i <= 5; i++) {
+    if (!daily.time[i]) break;
+    const dt = new Date(daily.time[i]);
+    const dayName = dt.toLocaleDateString(CONFIG.locale, { weekday:"short" }).replace('.', '').toUpperCase();
+    const code = daily.weather_code[i];
+    const info = wmoInfo(code, true);
+    const tmax = Math.round(daily.temperature_2m_max[i]);
+    const tmin = Math.round(daily.temperature_2m_min[i]);
+    const prob = daily.precipitation_probability_max[i] || 0;
+
+    const left = ((tmin - globMin) / globRange) * 100;
+    const right = ((tmax - globMin) / globRange) * 100;
+
+    const row = document.createElement("div");
+    row.className = "hf-row";
+    row.innerHTML = `
+      <div class="hf-day">${dayName}</div>
+      <div class="hf-icon">${ICONS[info.icon] || ICONS.cloud}</div>
+      <div class="hf-temps">
+        <span class="tmin">${tmin}°</span>
+        <span class="hf-bar"><span class="hf-bar-fill" style="left:${left}%; width:${Math.max(4, right - left)}%"></span></span>
+        <span class="tmax">${tmax}°</span>
+      </div>
+      <div class="hf-prob">${prob > 0 ? prob + "%" : ""}</div>
+    `;
+    list.appendChild(row);
+  }
+}
+
 /* === Render === */
 function render(d) {
   const w = d.weather;
@@ -660,11 +878,9 @@ function render(d) {
   const isDay = c.is_day === 1;
   const info = wmoInfo(c.weather_code, isDay);
 
-  // Topbar
   $("city").textContent = CONFIG.city;
   tickClock();
 
-  // Hero
   $("conditionEyebrow").textContent = info.short;
   $("condition").textContent = info.label;
   $("tempC").textContent = Math.round(c.temperature_2m);
@@ -675,10 +891,9 @@ function render(d) {
   const tmin = Math.round(w.daily.temperature_2m_min[0]);
   $("todayMinMax").textContent = `${tmax}° / ${tmin}°`;
 
-  // Achtergrond
   setBackground(info.bg);
 
-  // Hourly: vanaf huidig uur, 9 uren
+  /* Hourly: vanaf huidig uur, 9 uur */
   const now = new Date();
   const hourlyEl = $("hourly");
   hourlyEl.innerHTML = "";
@@ -709,11 +924,22 @@ function render(d) {
     hourlyEl.appendChild(cell);
   }
 
-  // Stats
+  /* Sparkline: 24 uur vanaf nu */
+  const next24 = [];
+  for (let i = 0; i < 24; i++) {
+    const idx = baseIdx + i;
+    if (w.hourly.temperature_2m[idx] == null) break;
+    next24.push(w.hourly.temperature_2m[idx]);
+  }
+  if (next24.length >= 4) renderSparkline(next24);
+
+  /* 5-daagse */
+  renderForecast(w.daily);
+
+  /* Stats */
   $("humidity").textContent = Math.round(c.relative_humidity_2m);
   $("dewpoint").textContent = Math.round(c.dew_point_2m);
 
-  // Neerslag: huidig uur prob
   const probs = w.hourly.precipitation_probability || [];
   const curProb = probs[baseIdx] != null ? Math.round(probs[baseIdx]) : 0;
   $("precip").textContent = curProb;
@@ -722,25 +948,20 @@ function render(d) {
   else if (curProb < 70) $("precipNote").textContent = "Matige kans op neerslag";
   else                   $("precipNote").textContent = "Neerslag verwacht";
 
-  // Wind
   $("windBft").textContent = kmhToBft(c.wind_speed_10m);
   $("windDir").textContent = compassDirNL(c.wind_direction_10m);
   $("windGusts").textContent = Math.round(c.wind_gusts_10m);
-  // Pijl wijst de richting waarheen de wind waait (tegenovergesteld van waar hij vandaan komt)
   $("windArrow").style.transform = `rotate(${(c.wind_direction_10m + 180) % 360}deg)`;
 
-  // Daglicht
   const sr = new Date(w.daily.sunrise[0]);
   const ss = new Date(w.daily.sunset[0]);
   $("sunrise").textContent = sr.toLocaleTimeString(CONFIG.locale, { hour:"2-digit", minute:"2-digit" });
   $("sunset").textContent  = ss.toLocaleTimeString(CONFIG.locale, { hour:"2-digit", minute:"2-digit" });
   const totalMins = (ss - sr) / 60000;
   $("daylightDuration").textContent = fmtMins(totalMins);
-  // progress bar
   const pct = Math.max(0, Math.min(1, (now - sr) / (ss - sr))) * 100;
   $("daylightFill").style.width = pct + "%";
 
-  // Zicht
   const visKm = c.visibility / 1000;
   $("visibility").textContent = visKm >= 10 ? Math.round(visKm) : visKm.toFixed(1);
   if (visKm >= 15)      $("visibilityNote").textContent = "Perfect helder zicht";
@@ -749,7 +970,6 @@ function render(d) {
   else if (visKm >= 1)  $("visibilityNote").textContent = "Beperkt zicht";
   else                  $("visibilityNote").textContent = "Slecht zicht";
 
-  // Luchtkwaliteit (Europese AQI)
   if (d.air && d.air.current && d.air.current.european_aqi != null) {
     const aqi = Math.round(d.air.current.european_aqi);
     $("aqValue").textContent = aqi;
@@ -770,14 +990,12 @@ function render(d) {
   }
 }
 
-/* Klok */
 function tickClock() {
   const now = new Date();
   $("dateStr").textContent = now.toLocaleDateString(CONFIG.locale, { weekday:"long", day:"numeric", month:"long" });
   $("timeStr").textContent = now.toLocaleTimeString(CONFIG.locale, { hour:"2-digit", minute:"2-digit" });
 }
 
-/* Hoofdlus */
 async function update() {
   try {
     const data = await fetchAll(CONFIG.latitude, CONFIG.longitude);
