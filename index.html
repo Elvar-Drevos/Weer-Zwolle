@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1920,initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>Weer · Zwolle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200;9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,20 +18,30 @@
     overflow: hidden;
     font-family: 'Outfit', system-ui, sans-serif;
     color: #ffffff;
-    background: #0c1018;
     -webkit-font-smoothing: antialiased;
   }
+  html { background: #0c1018; }
+  body { background: transparent; }
 
   /* ============ Achtergrond ============ */
-  #bg {
+  #bg-grad {
     position: fixed;
     inset: 0;
     z-index: -3;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     background-color: #0c1018;
   }
+  #bg-photo {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -2;
+    pointer-events: none;
+  }
+  #bg-photo.failed { display: none; }
+
 
   #overlay-top, #overlay-mid, #overlay-bottom {
     position: fixed;
@@ -458,7 +471,8 @@
 </head>
 <body>
 
-<div id="bg"></div>
+<div id="bg-grad"></div>
+<img id="bg-photo" src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85" alt="" aria-hidden="true" referrerpolicy="no-referrer">
 <div id="overlay-top"></div>
 <div id="overlay-mid"></div>
 <div id="overlay-bottom"></div>
@@ -719,35 +733,46 @@ function fmtMins(mins) {
 function showError(msg) { const e = $("errorBanner"); e.textContent = msg; e.style.display = "block"; }
 function hideError() { $("errorBanner").style.display = "none"; }
 
-/* === Achtergrond: zet altijd direct gradient, leg foto eroverheen als die laadt === */
+/* === Achtergrond: gradient als basis + <img> als foto-laag === */
+let bgAttemptId = 0;
+
 function setBackground(bgKey) {
-  const bg = $("bg");
   const grad = GRADIENTS[bgKey] || GRADIENTS["cloudy-day"];
-  // Direct gradient zetten — zo zie je altijd iets
-  bg.style.background = grad;
-  bg.style.backgroundSize = "cover";
-  bg.style.backgroundPosition = "center";
+  const gradEl = $("bg-grad");
+  const photoEl = $("bg-photo");
+
+  gradEl.style.background = grad;
+  photoEl.classList.remove("failed");
 
   const list = BG_CANDIDATES[bgKey] || [];
-  function tryNext(i) {
-    if (i >= list.length) {
-      console.warn("[weer] Alle foto's voor", bgKey, "faalden — gradient blijft staan.");
+  bgAttemptId++;
+  const myId = bgAttemptId;
+
+  if (list.length === 0) return;
+
+  let idx = 0;
+  function attempt() {
+    if (myId !== bgAttemptId) return;
+    if (idx >= list.length) {
+      photoEl.classList.add("failed");
+      console.warn("[weer] Geen foto gelukt voor", bgKey);
       return;
     }
-    const url = list[i];
-    const probe = new Image();
-    probe.onload = () => {
-      // Foto bovenop, gradient eronder als second layer (zichtbaar bij transparante delen)
-      bg.style.background = `url("${url}") center/cover no-repeat, ${grad}`;
-      console.log("[weer] Achtergrond geladen:", url);
+    const url = list[idx];
+    photoEl.onload = () => {
+      if (myId !== bgAttemptId) return;
+      photoEl.classList.remove("failed");
+      console.log("[weer] Foto geladen:", url);
     };
-    probe.onerror = () => {
+    photoEl.onerror = () => {
+      if (myId !== bgAttemptId) return;
       console.warn("[weer] Foto faalde:", url);
-      tryNext(i + 1);
+      idx++;
+      attempt();
     };
-    probe.src = url;
+    photoEl.src = url;
   }
-  tryNext(0);
+  attempt();
 }
 
 /* === Open-Meteo data === */
