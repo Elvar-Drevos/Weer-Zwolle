@@ -49,9 +49,9 @@
     z-index: -1;
     pointer-events: none;
   }
-  #overlay-top    { top: 0;    height: 30vh; background: linear-gradient(180deg, rgba(8,10,18,0.62) 0%, rgba(8,10,18,0.0) 100%); }
-  #overlay-mid    { top: 25vh; height: 50vh; background: radial-gradient(ellipse at center, rgba(8,10,18,0.30) 0%, rgba(8,10,18,0.0) 70%); }
-  #overlay-bottom { bottom: 0; height: 60vh; background: linear-gradient(0deg, rgba(8,10,18,0.88) 0%, rgba(8,10,18,0.55) 50%, rgba(8,10,18,0.0) 100%); }
+  #overlay-top    { top: 0;    height: 35vh; background: linear-gradient(180deg, rgba(6,8,14,0.78) 0%, rgba(6,8,14,0.0) 100%); }
+  #overlay-mid    { top: 10vh; height: 70vh; background: radial-gradient(ellipse 70% 60% at 35% 50%, rgba(6,8,14,0.55) 0%, rgba(6,8,14,0.18) 50%, rgba(6,8,14,0.0) 80%); }
+  #overlay-bottom { bottom: 0; height: 62vh; background: linear-gradient(0deg, rgba(6,8,14,0.94) 0%, rgba(6,8,14,0.78) 30%, rgba(6,8,14,0.45) 60%, rgba(6,8,14,0.0) 100%); }
 
   .app {
     position: relative;
@@ -76,7 +76,10 @@
     font-size: 22px;
     font-weight: 500;
     letter-spacing: 0.3px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.65);
   }
+  .topbar .clock,
+  .topbar .clock .time { text-shadow: 0 2px 12px rgba(0,0,0,0.65); }
   .topbar .location svg { width: 20px; height: 20px; opacity: 0.8; }
   .topbar .clock {
     display: flex;
@@ -120,11 +123,12 @@
     font-weight: 600;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.78);
+    color: rgba(255,255,255,0.92);
     margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 14px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.7);
   }
   .hero-eyebrow .pip {
     width: 28px;
@@ -140,7 +144,9 @@
     letter-spacing: -2px;
     margin-bottom: 6px;
     color: #fff;
-    text-shadow: 0 2px 30px rgba(0,0,0,0.35);
+    text-shadow:
+      0 2px 24px rgba(0,0,0,0.75),
+      0 0 60px rgba(0,0,0,0.4);
   }
   .hero-temp {
     display: flex;
@@ -155,7 +161,10 @@
     font-weight: 200;
     letter-spacing: -10px;
     color: #fff;
-    text-shadow: 0 6px 60px rgba(0,0,0,0.45);
+    text-shadow:
+      0 6px 60px rgba(0,0,0,0.7),
+      0 0 100px rgba(0,0,0,0.4),
+      0 0 160px rgba(255,255,255,0.08);
   }
   .hero-temp .deg {
     font-family: 'Fraunces', serif;
@@ -164,8 +173,9 @@
     font-weight: 200;
     margin-top: 22px;
     margin-left: 8px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.92);
     letter-spacing: -2px;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.7);
   }
   .hero-meta {
     margin-top: 12px;
@@ -173,11 +183,12 @@
     gap: 32px;
     font-size: 22px;
     font-weight: 400;
-    color: rgba(255,255,255,0.88);
+    color: #fff;
     flex-wrap: wrap;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
   }
   .hero-meta .label {
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.7);
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 13px;
@@ -185,30 +196,36 @@
     margin-right: 8px;
   }
 
-  /* ============ Sparkline (24u temp) ============ */
+  /* ============ Sparkline (24u neerslag) ============ */
   .hero-sparkline {
     margin-top: 22px;
     max-width: 760px;
+    padding: 14px 18px 12px;
+    border-radius: 14px;
+    background: rgba(8,12,22,0.42);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.10);
   }
   .spark-head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
   .spark-title {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 2.4px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.78);
   }
   .spark-range {
     font-size: 13px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.8);
     font-weight: 500;
   }
-  .spark-range b { color: #fff; font-weight: 600; }
+  .spark-range b { color: #9bd1ff; font-weight: 700; }
   #sparkSvg {
     width: 100%;
     height: 90px;
@@ -220,24 +237,28 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 1.2px;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.65);
     text-transform: uppercase;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   /* ============ 5-DAAGSE FORECAST (rechts in hero) ============ */
   .hero-forecast {
     width: 360px;
-    border-left: 1px solid rgba(255,255,255,0.16);
-    padding-left: 32px;
+    padding: 22px 28px;
+    border-radius: 18px;
+    background: rgba(8,12,22,0.42);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.12);
   }
   .hf-title {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 16px;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: 12px;
   }
   .hf-list { display: flex; flex-direction: column; }
   .hf-row {
@@ -297,8 +318,13 @@
   .bottombar {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    padding-top: 20px;
+    gap: 16px;
+    margin: 0 -56px -28px;
+    padding: 22px 56px 28px;
+    background: linear-gradient(180deg, rgba(6,8,14,0.0) 0%, rgba(6,8,14,0.55) 30%, rgba(6,8,14,0.85) 100%);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
 
   .hourly {
@@ -512,11 +538,11 @@
         <div><span class="label">Fahrenheit</span><span id="tempF">—°F</span></div>
       </div>
 
-      <!-- Sparkline next 24u -->
+      <!-- Sparkline: neerslag komende 24 uur -->
       <div class="hero-sparkline">
         <div class="spark-head">
-          <div class="spark-title">Komende 24 uur</div>
-          <div class="spark-range">Min <b id="spark24min">—°</b> · Max <b id="spark24max">—°</b></div>
+          <div class="spark-title">Neerslag · komende 24 uur</div>
+          <div class="spark-range">Totaal <b id="precipTotal">— mm</b> · Piek <b id="precipPeak">—%</b></div>
         </div>
         <svg id="sparkSvg" viewBox="0 0 1000 90" preserveAspectRatio="none"></svg>
         <div class="spark-axis">
@@ -780,7 +806,7 @@ async function fetchAll(lat, lon) {
   const wp = new URLSearchParams({
     latitude: lat, longitude: lon,
     current: "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,visibility,is_day,dew_point_2m",
-    hourly: "temperature_2m,weather_code,precipitation_probability,is_day",
+    hourly: "temperature_2m,weather_code,precipitation_probability,precipitation,is_day",
     daily: "sunrise,sunset,temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max",
     timezone: CONFIG.timezone,
     wind_speed_unit: "kmh",
@@ -798,58 +824,60 @@ async function fetchAll(lat, lon) {
   return { weather: w, air: a };
 }
 
-/* === Sparkline: 24u temperatuur === */
-function renderSparkline(temps) {
+/* === Neerslagbargrafiek 24u === */
+function renderPrecipChart(probs, amounts) {
   const svg = $("sparkSvg");
-  const W = 1000, H = 90, PAD_X = 8, PAD_Y_TOP = 18, PAD_Y_BOTTOM = 8;
-  const tMin = Math.min(...temps);
-  const tMax = Math.max(...temps);
-  const range = Math.max(1, tMax - tMin);
+  const W = 1000, H = 90;
+  const PAD_X = 8, PAD_TOP = 22, PAD_BOT = 6;
+  const chartH = H - PAD_TOP - PAD_BOT;
+  const slotW = (W - 2 * PAD_X) / probs.length;
+  const barW = slotW * 0.66;
 
-  const points = temps.map((t, i) => ({
-    x: PAD_X + (i / (temps.length - 1)) * (W - 2 * PAD_X),
-    y: PAD_Y_TOP + (1 - (t - tMin) / range) * (H - PAD_Y_TOP - PAD_Y_BOTTOM),
-    t
-  }));
+  // Totals + peak
+  const totalMm = amounts.reduce((s, v) => s + (v || 0), 0);
+  let peakIdx = 0, peakVal = 0;
+  probs.forEach((p, i) => { if (p > peakVal) { peakVal = p; peakIdx = i; } });
 
-  // Smooth path via cubic bezier (simple horizontal-tangent smoothing)
-  let pathD = `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
-  for (let i = 1; i < points.length; i++) {
-    const p0 = points[i - 1];
-    const p1 = points[i];
-    const cp1x = p0.x + (p1.x - p0.x) / 2;
-    const cp1y = p0.y;
-    const cp2x = p0.x + (p1.x - p0.x) / 2;
-    const cp2y = p1.y;
-    pathD += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p1.x.toFixed(1)},${p1.y.toFixed(1)}`;
+  let inner = "";
+
+  // Onzichtbare baseline-lijn voor structuur
+  inner += `<line x1="${PAD_X}" y1="${H - PAD_BOT}" x2="${W - PAD_X}" y2="${H - PAD_BOT}" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>`;
+  // 50%-gridlijn (subtiel)
+  const midY = PAD_TOP + chartH * 0.5;
+  inner += `<line x1="${PAD_X}" y1="${midY}" x2="${W - PAD_X}" y2="${midY}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 4" stroke-width="1"/>`;
+
+  if (peakVal === 0) {
+    // Geen neerslag verwacht — toon centrale tekst
+    inner += `<text x="${W/2}" y="${H/2 + 5}" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="14" font-weight="500" font-family="Outfit, sans-serif" letter-spacing="1">DROOG · GEEN NEERSLAG VERWACHT</text>`;
+  } else {
+    probs.forEach((p, i) => {
+      const x = PAD_X + i * slotW + (slotW - barW) / 2;
+      const h = Math.max(2, (p / 100) * chartH);
+      const y = H - PAD_BOT - h;
+      const op = p < 5 ? 0.20 : (0.45 + (p / 100) * 0.55);
+      inner += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="url(#precipGrad)" opacity="${op.toFixed(2)}"/>`;
+    });
+
+    // Peak label
+    const peakX = PAD_X + peakIdx * slotW + slotW / 2;
+    const peakH = Math.max(2, (peakVal / 100) * chartH);
+    const peakY = H - PAD_BOT - peakH;
+    const labelX = Math.max(PAD_X + 20, Math.min(W - PAD_X - 20, peakX));
+    inner += `<text x="${labelX.toFixed(1)}" y="${(peakY - 7).toFixed(1)}" text-anchor="middle" fill="#9bd1ff" font-size="13" font-weight="700" font-family="Outfit, sans-serif">${Math.round(peakVal)}%</text>`;
   }
-  const last = points[points.length - 1];
-  const fillD = `${pathD} L ${last.x.toFixed(1)},${H} L ${points[0].x.toFixed(1)},${H} Z`;
-
-  // Min/max indices
-  const minIdx = temps.indexOf(tMin);
-  const maxIdx = temps.indexOf(tMax);
 
   svg.innerHTML = `
     <defs>
-      <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(255,216,102,0.45)"/>
-        <stop offset="100%" stop-color="rgba(255,216,102,0)"/>
+      <linearGradient id="precipGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#bfe1ff"/>
+        <stop offset="100%" stop-color="#3a7cb3"/>
       </linearGradient>
     </defs>
-    <path d="${fillD}" fill="url(#sparkGrad)"/>
-    <path d="${pathD}" stroke="#ffd866" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-      vector-effect="non-scaling-stroke"/>
-    <circle cx="${points[maxIdx].x.toFixed(1)}" cy="${points[maxIdx].y.toFixed(1)}" r="5" fill="#ffd866"/>
-    <text x="${points[maxIdx].x.toFixed(1)}" y="${(points[maxIdx].y - 8).toFixed(1)}" text-anchor="middle"
-      fill="#fff" font-size="14" font-weight="600" font-family="Outfit, sans-serif">${Math.round(tMax)}°</text>
-    <circle cx="${points[minIdx].x.toFixed(1)}" cy="${points[minIdx].y.toFixed(1)}" r="5" fill="#9bd1ff"/>
-    <text x="${points[minIdx].x.toFixed(1)}" y="${(points[minIdx].y + 18).toFixed(1)}" text-anchor="middle"
-      fill="#9bd1ff" font-size="14" font-weight="600" font-family="Outfit, sans-serif">${Math.round(tMin)}°</text>
+    ${inner}
   `;
 
-  $("spark24min").textContent = Math.round(tMin) + "°";
-  $("spark24max").textContent = Math.round(tMax) + "°";
+  $("precipTotal").textContent = totalMm < 0.1 ? "0 mm" : (totalMm < 10 ? totalMm.toFixed(1) : Math.round(totalMm)) + " mm";
+  $("precipPeak").textContent = Math.round(peakVal) + "%";
 }
 
 /* === 5-daagse forecast === */
@@ -949,14 +977,15 @@ function render(d) {
     hourlyEl.appendChild(cell);
   }
 
-  /* Sparkline: 24 uur vanaf nu */
-  const next24 = [];
+  /* Neerslag 24 uur vanaf nu */
+  const next24prob = [], next24amt = [];
   for (let i = 0; i < 24; i++) {
     const idx = baseIdx + i;
-    if (w.hourly.temperature_2m[idx] == null) break;
-    next24.push(w.hourly.temperature_2m[idx]);
+    if (w.hourly.precipitation_probability[idx] == null) break;
+    next24prob.push(w.hourly.precipitation_probability[idx] || 0);
+    next24amt.push(w.hourly.precipitation ? (w.hourly.precipitation[idx] || 0) : 0);
   }
-  if (next24.length >= 4) renderSparkline(next24);
+  if (next24prob.length >= 4) renderPrecipChart(next24prob, next24amt);
 
   /* 5-daagse */
   renderForecast(w.daily);
