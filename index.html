@@ -8,8 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-<link rel="preconnect" href="https://images.pexels.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200;9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Preload kritieke font-bestanden zodat ze parallel met de HTML al binnenkomen -->
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxCBTeO-U.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJuktqQ4E.woff2">
+
+<!-- Variable-axis URL = kleinere CSS, één file per family -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..500&family=Outfit:wght@300..800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..500&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -22,6 +28,13 @@
   }
   html { background: #0c1018; }
   body { background: transparent; }
+
+  /* Verberg de UI tot fonts klaar zijn — voorkomt FOUT/wrong-font flash */
+  .app { opacity: 0; transition: opacity 0.35s ease; }
+  html.ready .app { opacity: 1; }
+  /* Foto faded ook in zodra geladen */
+  #bg-photo { opacity: 0; transition: opacity 0.4s ease; }
+  #bg-photo.shown { opacity: 1; }
 
   /* ============ Achtergrond ============ */
   #bg-grad {
@@ -40,7 +53,7 @@
     z-index: -2;
     pointer-events: none;
   }
-  #bg-photo.failed { display: none; }
+  #bg-photo.failed { display: none !important; }
 
 
   #overlay-top, #overlay-mid, #overlay-bottom {
@@ -510,10 +523,22 @@
 <body>
 
 <div id="bg-grad"></div>
-<img id="bg-photo" src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85" alt="" aria-hidden="true" referrerpolicy="no-referrer">
+<img id="bg-photo" alt="" aria-hidden="true" referrerpolicy="no-referrer">
 <div id="overlay-top"></div>
 <div id="overlay-mid"></div>
 <div id="overlay-bottom"></div>
+
+<script>
+  // Verberg .app tot fonts geladen zijn (voorkomt verkeerde-font flash)
+  // Hard cap op 2.5s: als fonts om welke reden niet laden, toon alsnog.
+  (function() {
+    var reveal = function() { document.documentElement.classList.add('ready'); };
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(reveal);
+    }
+    setTimeout(reveal, 2500);
+  })();
+</script>
 
 <div class="app">
 
@@ -671,44 +696,44 @@ const CONFIG = {
    =================================================================== */
 const BG_CANDIDATES = {
   "clear-day":    [
-    "https://images.unsplash.com/photo-1601297183305-6df142704ea2?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1601297183305-6df142704ea2?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1920&q=80"
   ],
   "clear-night":  [
-    "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=1920&q=80"
   ],
   "cloudy-day":   [
-    "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1505322747495-6afdd3b70760?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1505322747495-6afdd3b70760?auto=format&fit=crop&w=1920&q=80"
   ],
   "cloudy-night": [
-    "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1502209524164-acea936639a2?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1502209524164-acea936639a2?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=1920&q=80"
   ],
   "fog":          [
-    "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1543968996-ee822b8176ba?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1543968996-ee822b8176ba?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1920&q=80"
   ],
   "rain":         [
-    "https://images.unsplash.com/photo-1438449805896-28a666819a20?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1428592953211-077101b2021b?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1493314894560-5c412a56c17c?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1438449805896-28a666819a20?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1428592953211-077101b2021b?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1493314894560-5c412a56c17c?auto=format&fit=crop&w=1920&q=80"
   ],
   "snow":         [
-    "https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1457269449834-928af64c684d?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1457269449834-928af64c684d?auto=format&fit=crop&w=1920&q=80"
   ],
   "thunder":      [
-    "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1429552077091-836152271555?auto=format&fit=crop&w=2400&q=85",
-    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=2400&q=85"
+    "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1429552077091-836152271555?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=1920&q=80"
   ]
 };
 
@@ -792,6 +817,10 @@ function setBackground(bgKey) {
 
   if (list.length === 0) return;
 
+  // Skip als deze key al actief is en foto al getoond wordt
+  if (photoEl.dataset.bgKey === bgKey && photoEl.classList.contains("shown")) return;
+  photoEl.dataset.bgKey = bgKey;
+
   let idx = 0;
   function attempt() {
     if (myId !== bgAttemptId) return;
@@ -804,6 +833,7 @@ function setBackground(bgKey) {
     photoEl.onload = () => {
       if (myId !== bgAttemptId) return;
       photoEl.classList.remove("failed");
+      photoEl.classList.add("shown");
       console.log("[weer] Foto geladen:", url);
     };
     photoEl.onerror = () => {
@@ -1099,10 +1129,29 @@ function tickClock() {
   $("timeStr").textContent = now.toLocaleTimeString(CONFIG.locale, { hour:"2-digit", minute:"2-digit" });
 }
 
+/* === LocalStorage cache: instant render bij herlaad === */
+const CACHE_KEY = "weer-zwolle-v1";
+function loadCached() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    // Cache geldig 30 minuten
+    if (!obj.ts || Date.now() - obj.ts > 30 * 60 * 1000) return null;
+    return obj.data;
+  } catch (e) { return null; }
+}
+function saveCached(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data }));
+  } catch (e) {}
+}
+
 async function update() {
   try {
     const data = await fetchAll(CONFIG.latitude, CONFIG.longitude);
     render(data);
+    saveCached(data);
     hideError();
   } catch (e) {
     console.error(e);
@@ -1110,6 +1159,11 @@ async function update() {
   }
 }
 
+// Render direct met laatste cache (instant!), dan fresh ophalen
+const cached = loadCached();
+if (cached) {
+  try { render(cached); } catch(e) { console.warn("[weer] cache render faalde:", e); }
+}
 update();
 setInterval(update, CONFIG.refreshMinutes * 60 * 1000);
 setInterval(tickClock, 30 * 1000);
