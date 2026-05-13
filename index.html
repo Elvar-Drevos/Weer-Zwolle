@@ -7,7 +7,8 @@
 <title>Weer · Zwolle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 
 <!-- Preload kritieke font-bestanden zodat ze parallel met de HTML al binnenkomen -->
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxCBTeO-U.woff2">
@@ -732,59 +733,66 @@ const CONFIG = {
 /* ===================================================================
    ACHTERGRONDFOTO'S — geverifieerde Unsplash URLs (allemaal HTTP 200)
    =================================================================== */
+/* Foto's komen van Wikimedia Commons — de bestandsnaam beschrijft de inhoud,
+   dus je kunt zelf nieuwe foto's vinden op:
+      https://commons.wikimedia.org/wiki/Special:Search
+   Kopieer de bestandsnaam (bv. "Heavy_snowfall_in_Gatlinburg,_TN.jpg") en plak in:
+      https://commons.wikimedia.org/wiki/Special:FilePath/<naam>?width=1920
+   Spaties → underscores. Speciale tekens (), ',', accenten = gewoon laten staan. */
+function wm(filename) {
+  return "https://commons.wikimedia.org/wiki/Special:FilePath/" + filename + "?width=1920";
+}
+
 const BG_CANDIDATES = {
-  "clear-day":    [
-    "https://images.unsplash.com/photo-1480497490787-505ec076689f?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80"
+  "clear-day": [
+    wm("Clear_blue_sky.jpg"),
+    wm("Mountain_lake_and_a_clear_blue_sky_(54844909972).jpg"),
+    wm("Blue_skies_on_a_sunny_day_drive_to_Aso_Rock_Abuja.jpg"),
+    wm("DFC_4517_Quiet_fishing_boats_resting_on_a_sunny_sandy_shore_beneath_a_clear_blue_sky.jpg"),
+    wm("Sunny_Bright_Clouds.jpg")
   ],
-  "clear-night":  [
-    "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1532926381893-7542290edf1d?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1506634064465-7dab4de896ed?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?auto=format&fit=crop&w=1920&q=80"
+  "clear-night": [
+    wm("Stars_01_(MK).jpg"),
+    wm("ALMA_and_a_Starry_Night.jpg"),
+    wm("Night_Sky_Stars_Trees_02.jpg"),
+    wm("Starry_Night_at_Phu_Kradueng_National_Park_09.jpg"),
+    wm("Starry_Night,_Moonless_Sky_(3997085308).jpg")
   ],
-  "cloudy-day":   [
-    "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1483381719261-6620dfa2d28a?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1505322747495-6afdd3b70760?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1530563885674-66db50a1af19?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1486825586573-7131f7991bdd?auto=format&fit=crop&w=1920&q=80"
+  "cloudy-day": [
+    wm("Overcast_sky_23.jpg"),
+    wm("Cloudy_Day_Sunrise_(2263057382).jpg"),
+    wm("Dal_Lake_on_a_cloudy_day.jpg"),
+    wm("Grey_skies_over_St_Albans_Market.jpg")
   ],
   "cloudy-night": [
-    "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1502209524164-acea936639a2?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1543722530-d2c3201371e7?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1920&q=80"
+    wm("Cloudy_night_sky_with_the_Moon_on_October_17,_2024.jpg"),
+    wm("Cloudy_Night_Sky_(17677878458).jpg"),
+    wm("The_moon_and_cloudy_sky.jpg"),
+    wm("Night_moon_with_clouds.jpg")
   ],
-  "fog":          [
-    "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1543968996-ee822b8176ba?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1920&q=80"
+  "fog": [
+    wm("Fog_around_Lake_Heron,_Taylor_Range,_Canterbury,_New_Zealand.jpg"),
+    wm("Receding_Fog_over_Lake_Altaussee.jpg"),
+    wm("Misty_morning_in_Sweden.jpg"),
+    wm("Khada_Gorge_Valley_Filled_with_Morning_Fog_in_Georgia.jpg")
   ],
-  "rain":         [
-    "https://images.unsplash.com/photo-1438449805896-28a666819a20?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1428592953211-077101b2021b?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1493314894560-5c412a56c17c?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?auto=format&fit=crop&w=1920&q=80"
+  "rain": [
+    wm("Storm_clouds_pouring_rain_down_on_nearby_Bora_Bora_-_panoramio.jpg"),
+    wm("Rainy_day_photography.jpg"),
+    wm("Rainy_day_In_Vancouver.jpg"),
+    wm("Napa_rain_storm_tests_new_flood_project_(6863397126).jpg")
   ],
-  "snow":         [
-    "https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1457269449834-928af64c684d?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1920&q=80"
+  "snow": [
+    wm("Heavy_snowfall_in_Moscow_region_near_Yakhroma_on_2021_Feb_14.jpg"),
+    wm("Heavy_snowfall_in_Gatlinburg,_TN.jpg"),
+    wm("Heavy_snowfall_in_a_village_of_Chamba_district,_Himachal_Pradesh.jpg"),
+    wm("Winter_Lindulovskaya_Grove.jpg")
   ],
-  "thunder":      [
-    "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1429552077091-836152271555?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1500674425229-f692875b0ab7?auto=format&fit=crop&w=1920&q=80"
+  "thunder": [
+    wm("Thunderstorm_And_Bolt_Lightning_(224254879).jpeg"),
+    wm("First_Bolt_of_Lightning_01.jpg"),
+    wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(33941).jpg"),
+    wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(39924).jpg")
   ]
 };
 
