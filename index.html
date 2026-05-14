@@ -744,55 +744,54 @@ function wm(filename) {
 }
 
 const BG_CANDIDATES = {
+  // Iconische landschap-foto's, geselecteerd via Wikimedia Commons search
   "clear-day": [
-    wm("Clear_blue_sky.jpg"),
+    wm("Mount_Rainier_behind_the_flowering_meadows_of_Paradise_Park_(18_August_2012).jpg"),
+    wm("Fairy_Meadows,_Nanga_Parbat_Base_Camp.jpg"),
     wm("Mountain_lake_and_a_clear_blue_sky_(54844909972).jpg"),
-    wm("Blue_skies_on_a_sunny_day_drive_to_Aso_Rock_Abuja.jpg"),
-    wm("DFC_4517_Quiet_fishing_boats_resting_on_a_sunny_sandy_shore_beneath_a_clear_blue_sky.jpg"),
-    wm("Sunny_Bright_Clouds.jpg")
+    wm("Wooden_hut_fence_mountains_and_blue_sky_in_the_green_rice_fields_of_Vang_Vieng_in_Laos.jpg")
   ],
   "clear-night": [
-    wm("Stars_01_(MK).jpg"),
-    wm("ALMA_and_a_Starry_Night.jpg"),
-    wm("Night_Sky_Stars_Trees_02.jpg"),
-    wm("Starry_Night_at_Phu_Kradueng_National_Park_09.jpg"),
-    wm("Starry_Night,_Moonless_Sky_(3997085308).jpg")
+    wm("Matterhorn_and_the_milky_way_galaxy_at_night_reflected_in_the_Riffelsee.jpg"),
+    wm("Bontecou_Lake_Milky_Way_panorama.jpg"),
+    wm("Aurora_borealis_above_Storfjorden_and_the_Lyngen_Alps_in_moonlight,_2012_March.jpg"),
+    wm("Multicolored_aurora_borealis_pillar_over_Brastad.jpg"),
+    wm("Beneath_the_Milky_Way.jpg")
   ],
   "cloudy-day": [
-    wm("Overcast_sky_23.jpg"),
-    wm("Cloudy_Day_Sunrise_(2263057382).jpg"),
-    wm("Dal_Lake_on_a_cloudy_day.jpg"),
-    wm("Grey_skies_over_St_Albans_Market.jpg")
+    wm("Serene_Coastal_Landscape_Under_Stormy_Skies.jpg"),
+    wm("Wild_Daisy_Field_in_Norio_Village_Georgia_under_a_Stormy_Sky.jpg"),
+    wm("Sunlight_and_stormy_sky_over_the_mountains_and_paddy_fields_in_Vang_Vieng,_Laos.jpg"),
+    wm("Stormy_skies_(7853609792).jpg")
   ],
   "cloudy-night": [
+    wm("Full_moon_and_clouds_over_Paris_by_night_(9248448977).jpg"),
     wm("Cloudy_night_sky_with_the_Moon_on_October_17,_2024.jpg"),
-    wm("Cloudy_Night_Sky_(17677878458).jpg"),
-    wm("The_moon_and_cloudy_sky.jpg"),
     wm("Night_moon_with_clouds.jpg")
   ],
   "fog": [
     wm("Fog_around_Lake_Heron,_Taylor_Range,_Canterbury,_New_Zealand.jpg"),
     wm("Receding_Fog_over_Lake_Altaussee.jpg"),
-    wm("Misty_morning_in_Sweden.jpg"),
-    wm("Khada_Gorge_Valley_Filled_with_Morning_Fog_in_Georgia.jpg")
+    wm("Green_paddy_fields_with_fog,_mountains_and_faint_clouds_at_sunset_in_Vang_Vieng.jpg"),
+    wm("Misty_morning_in_Sweden.jpg")
   ],
   "rain": [
     wm("Storm_clouds_pouring_rain_down_on_nearby_Bora_Bora_-_panoramio.jpg"),
     wm("Rainy_day_photography.jpg"),
-    wm("Rainy_day_In_Vancouver.jpg"),
+    wm("Storm_in_Copacabana.jpg"),
     wm("Napa_rain_storm_tests_new_flood_project_(6863397126).jpg")
   ],
   "snow": [
-    wm("Heavy_snowfall_in_Moscow_region_near_Yakhroma_on_2021_Feb_14.jpg"),
-    wm("Heavy_snowfall_in_Gatlinburg,_TN.jpg"),
-    wm("Heavy_snowfall_in_a_village_of_Chamba_district,_Himachal_Pradesh.jpg"),
-    wm("Winter_Lindulovskaya_Grove.jpg")
+    wm("Peyto_Lake_in_winter.jpg"),
+    wm("Winter_landscape_of_Carpathian_forest.jpg"),
+    wm("Winter-Snow-Stream-Forest_-_West_Virginia_-_ForestWander.jpg"),
+    wm("Heavy_snowfall_in_Moscow_region_near_Yakhroma_on_2021_Feb_14.jpg")
   ],
   "thunder": [
-    wm("Thunderstorm_And_Bolt_Lightning_(224254879).jpeg"),
-    wm("First_Bolt_of_Lightning_01.jpg"),
+    wm("Lloydminster_thunderstorm_August_26_2018.jpeg"),
+    wm("Thunderstorm_over_Tartu.jpg"),
     wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(33941).jpg"),
-    wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(39924).jpg")
+    wm("Yellow_clouds_before_thunderstorm_3.JPG")
   ]
 };
 
@@ -863,11 +862,15 @@ function hideError() { $("errorBanner").style.display = "none"; }
 let bgAttemptId = 0;
 
 /* Rotatie: alleen doorschuiven wanneer het WEERTYPE wisselt.
-   Bij refreshes met hetzelfde weer blijft dezelfde foto staan.
-   - state.lastKey = welke weer-key er als laatst getoond werd
-   - state.indices[key] = laatst gebruikte foto-index per key */
-const ROT_KEY = "weer-photo-rotation-v2";
-function pickRotationIndex(bgKey, listLen) {
+   - state.lastKey = welke weer-key als laatst werkelijk werd GETOOND
+   - state.indices[key] = laatst werkelijk getoonde foto-index per key
+   pickRotationIndex LEEST alleen (geeft bedoelde index).
+   commitRotation SCHRIJFT pas wanneer een foto echt succesvol is geladen.
+   Zo blijft localStorage in sync met wat de gebruiker écht ziet, zelfs als
+   een foto faalt en we naar de volgende in de lijst vallen. */
+const ROT_KEY = "weer-photo-rotation-v3";
+
+function readRotState() {
   let state = { lastKey: null, indices: {} };
   try {
     const raw = localStorage.getItem(ROT_KEY);
@@ -879,21 +882,25 @@ function pickRotationIndex(bgKey, listLen) {
       }
     }
   } catch (e) {}
+  return state;
+}
 
-  let idx;
+function pickRotationIndex(bgKey, listLen) {
+  const state = readRotState();
   if (state.lastKey === bgKey && typeof state.indices[bgKey] === "number") {
-    // Zelfde weer als laatst — laat dezelfde foto staan
-    idx = state.indices[bgKey];
-  } else {
-    // Nieuw weertype (of nooit eerder gezien) — pak de volgende uit de cyclus
-    const last = (typeof state.indices[bgKey] === "number") ? state.indices[bgKey] : -1;
-    idx = (last + 1) % listLen;
-    state.indices[bgKey] = idx;
+    // Zelfde weer als laatst → behoud dezelfde foto-index
+    return state.indices[bgKey] % listLen;
   }
+  // Nieuw weertype → volgende uit cyclus (maar niet opslaan tot foto echt geladen is)
+  const last = (typeof state.indices[bgKey] === "number") ? state.indices[bgKey] : -1;
+  return (last + 1) % listLen;
+}
 
+function commitRotation(bgKey, idx) {
+  const state = readRotState();
+  state.indices[bgKey] = idx;
   state.lastKey = bgKey;
   try { localStorage.setItem(ROT_KEY, JSON.stringify(state)); } catch (e) {}
-  return idx;
 }
 
 function setBackground(bgKey) {
@@ -930,6 +937,9 @@ function setBackground(bgKey) {
       if (myId !== bgAttemptId) return;
       photoEl.classList.remove("failed");
       photoEl.classList.add("shown");
+      // Pas NU vastleggen welke index er echt te zien is — zo blijft de
+      // localStorage in sync met de getoonde foto, ook bij fallback na falen.
+      commitRotation(bgKey, idx % list.length);
       console.log("[weer] Foto geladen voor", bgKey, "idx", idx % list.length, ":", url);
     };
     photoEl.onerror = () => {
