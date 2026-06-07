@@ -769,58 +769,87 @@ const BG_CANDIDATES = {
     wm("Cloudy_night_sky_with_the_Moon_on_October_17,_2024.jpg"),
     wm("Night_moon_with_clouds.jpg")
   ],
-  "fog": [
+  "fog-day": [
     wm("Fog_around_Lake_Heron,_Taylor_Range,_Canterbury,_New_Zealand.jpg"),
     wm("Receding_Fog_over_Lake_Altaussee.jpg"),
     wm("Green_paddy_fields_with_fog,_mountains_and_faint_clouds_at_sunset_in_Vang_Vieng.jpg"),
     wm("Misty_morning_in_Sweden.jpg")
   ],
-  "rain": [
-    wm("Storm_clouds_pouring_rain_down_on_nearby_Bora_Bora_-_panoramio.jpg"),
-    wm("Rainy_day_photography.jpg"),
-    wm("Storm_in_Copacabana.jpg"),
-    wm("Napa_rain_storm_tests_new_flood_project_(6863397126).jpg")
+  "fog-night": [
+    wm("Foggy_night_at_the_parking_lot.jpg"),
+    wm("Foggy_winter_night_in_Donetsk.jpg"),
+    wm("Foggy_Street_at_Night_(3496892822).jpg"),
+    wm("Flickr_-_paul_bica_-_foggy_night.jpg")
   ],
-  "snow": [
+  "rain-day": [
+    wm("Rain_over_Beinn_Eich,_Luss_Hills,_Scotland.jpg"),
+    wm("Quinault_Rain_Forest_June_2018_011.jpg"),
+    wm("Forest_on_a_rainy_autumn_day_(52583076109).jpg"),
+    wm("Rain_Clouds_Tsarap_Phuktal_Zanskar_Jun24_R16_07793.jpg")
+  ],
+  "rain-night": [
+    wm("Night_street_after_rain_-_panoramio.jpg"),
+    wm("A_rainy_night_on_the_city_centre_-_geograph.org.uk_-_6292370.jpg"),
+    wm("New_York_night_during_a_break_in_the_rain_(9492518284).jpg"),
+    wm("Persistent_Night_Rain_In_The_Light_Of_Street_Lamp_(220669549).jpeg")
+  ],
+  "snow-day": [
     wm("Peyto_Lake_in_winter.jpg"),
     wm("Winter_landscape_of_Carpathian_forest.jpg"),
     wm("Winter-Snow-Stream-Forest_-_West_Virginia_-_ForestWander.jpg"),
     wm("Heavy_snowfall_in_Moscow_region_near_Yakhroma_on_2021_Feb_14.jpg")
   ],
-  "thunder": [
+  "snow-night": [
+    wm("Snowy_Night_(25527481033).jpg"),
+    wm("Snow_on_a_winter_night.png"),
+    wm("Winter_night._Jyrängöntie,_Helsinki.jpg"),
+    wm("Feuerbachbrücke_with_snow_at_night_2021-01-29_01.jpg")
+  ],
+  "thunder-day": [
     wm("Lloydminster_thunderstorm_August_26_2018.jpeg"),
     wm("Thunderstorm_over_Tartu.jpg"),
+    wm("Yellow_clouds_before_thunderstorm_3.JPG"),
+    wm("Peter_and_Paul_Fortress,_thunderstorm_sky,_St._Petersburg,_Russia.jpg")
+  ],
+  "thunder-night": [
     wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(33941).jpg"),
-    wm("Yellow_clouds_before_thunderstorm_3.JPG")
+    wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(39924).jpg"),
+    wm("Nighttime_Thunderstorm_and_Cloud-to-Cloud_Lightning_(63774).jpg"),
+    wm("Thunderstorm_And_Bolt_Lightning_(224254879).jpeg")
   ]
 };
 
-/* CSS gradient fallbacks — kicken in zodra een foto faalt */
+/* CSS gradient fallbacks — kicken in zodra een foto faalt.
+   Dag = lichter, nacht = donkerder zodat sfeer hoe dan ook klopt. */
 const GRADIENTS = {
-  "clear-day":    "linear-gradient(180deg, #4a90c8 0%, #87b4d4 40%, #f5c989 80%, #ec7063 100%)",
-  "clear-night":  "linear-gradient(180deg, #050a1a 0%, #0d1530 40%, #1f2a48 70%, #2a3658 100%)",
-  "cloudy-day":   "linear-gradient(180deg, #3e4a5c 0%, #5a6878 50%, #7e8c9c 100%)",
-  "cloudy-night": "linear-gradient(180deg, #0a0e18 0%, #1c2230 50%, #303849 100%)",
-  "rain":         "linear-gradient(180deg, #1a2535 0%, #2c3e50 50%, #4a6075 100%)",
-  "snow":         "linear-gradient(180deg, #6a7c90 0%, #8e9eb4 50%, #b8c6d4 100%)",
-  "fog":          "linear-gradient(180deg, #5a6068 0%, #7a818a 50%, #9aa1a9 100%)",
-  "thunder":      "linear-gradient(180deg, #08090f 0%, #1a1d2e 50%, #2c2f47 100%)"
+  "clear-day":     "linear-gradient(180deg, #4a90c8 0%, #87b4d4 40%, #f5c989 80%, #ec7063 100%)",
+  "clear-night":   "linear-gradient(180deg, #050a1a 0%, #0d1530 40%, #1f2a48 70%, #2a3658 100%)",
+  "cloudy-day":    "linear-gradient(180deg, #3e4a5c 0%, #5a6878 50%, #7e8c9c 100%)",
+  "cloudy-night":  "linear-gradient(180deg, #0a0e18 0%, #1c2230 50%, #303849 100%)",
+  "rain-day":      "linear-gradient(180deg, #2c3e50 0%, #4a6075 50%, #6a7e94 100%)",
+  "rain-night":    "linear-gradient(180deg, #06101e 0%, #14202e 50%, #26323e 100%)",
+  "snow-day":      "linear-gradient(180deg, #8a98a8 0%, #b0bcc8 50%, #d8e2ed 100%)",
+  "snow-night":    "linear-gradient(180deg, #1e2638 0%, #38445c 50%, #58647c 100%)",
+  "fog-day":       "linear-gradient(180deg, #7a818a 0%, #9aa1a9 50%, #b9bfc6 100%)",
+  "fog-night":     "linear-gradient(180deg, #1a1d24 0%, #2e333a 50%, #444a54 100%)",
+  "thunder-day":   "linear-gradient(180deg, #2c2e3a 0%, #424556 50%, #5a5e76 100%)",
+  "thunder-night": "linear-gradient(180deg, #08090f 0%, #1a1d2e 50%, #2c2f47 100%)"
 };
 
-/* WMO weercode → label + bg-key + icon-key */
+/* WMO weercode → label + bg-key (met dag/nacht) + icon-key */
 function wmoInfo(code, isDay) {
   const dn = isDay ? "day" : "night";
   if (code === 0)                                return { label:"Helder",            bg:`clear-${dn}`,   icon: isDay ? "sun" : "moon", short: isDay ? "Helder" : "Heldere nacht" };
   if (code === 1)                                return { label:"Vrijwel helder",    bg:`clear-${dn}`,   icon: isDay ? "sun" : "moon", short:"Vrijwel helder" };
   if (code === 2)                                return { label:"Half bewolkt",      bg:`cloudy-${dn}`,  icon: isDay ? "partly-day" : "partly-night", short:"Half bewolkt" };
   if (code === 3)                                return { label:"Bewolkt",           bg:`cloudy-${dn}`,  icon:"cloud", short:"Bewolkt" };
-  if ([45,48].includes(code))                    return { label:"Mist",              bg:"fog",           icon:"fog", short:"Mistig" };
-  if ([51,53,55,56,57].includes(code))           return { label:"Motregen",          bg:"rain",          icon:"drizzle", short:"Motregen" };
-  if ([61,63,80,81].includes(code))              return { label:"Regen",             bg:"rain",          icon:"rain", short:"Regenachtig" };
-  if ([65,82].includes(code))                    return { label:"Hevige regen",      bg:"rain",          icon:"rain", short:"Hevige regen" };
-  if ([66,67].includes(code))                    return { label:"IJzel",             bg:"rain",          icon:"rain", short:"IJzel" };
-  if ([71,73,75,77,85,86].includes(code))        return { label:"Sneeuw",            bg:"snow",          icon:"snow", short:"Sneeuw" };
-  if ([95,96,99].includes(code))                 return { label:"Onweer",            bg:"thunder",       icon:"thunder", short:"Onweer" };
+  if ([45,48].includes(code))                    return { label:"Mist",              bg:`fog-${dn}`,     icon:"fog", short:"Mistig" };
+  if ([51,53,55,56,57].includes(code))           return { label:"Motregen",          bg:`rain-${dn}`,    icon:"drizzle", short:"Motregen" };
+  if ([61,63,80,81].includes(code))              return { label:"Regen",             bg:`rain-${dn}`,    icon:"rain", short:"Regenachtig" };
+  if ([65,82].includes(code))                    return { label:"Hevige regen",      bg:`rain-${dn}`,    icon:"rain", short:"Hevige regen" };
+  if ([66,67].includes(code))                    return { label:"IJzel",             bg:`rain-${dn}`,    icon:"rain", short:"IJzel" };
+  if ([71,73,75,77,85,86].includes(code))        return { label:"Sneeuw",            bg:`snow-${dn}`,    icon:"snow", short:"Sneeuw" };
+  if ([95,96,99].includes(code))                 return { label:"Onweer",            bg:`thunder-${dn}`, icon:"thunder", short:"Onweer" };
   return { label:"Onbekend", bg:`cloudy-${dn}`, icon:"cloud", short:"—" };
 }
 
