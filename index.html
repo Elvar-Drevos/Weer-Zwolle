@@ -43,6 +43,7 @@
     inset: 0;
     z-index: -3;
     background-color: #0c1018;
+    transform: translateZ(0);          /* eigen GPU-laag: gradient niet her-rasteren tijdens foto-fade */
   }
   #bg-photo {
     position: fixed;
@@ -53,6 +54,8 @@
     object-position: center;
     z-index: -2;
     pointer-events: none;
+    transform: translateZ(0);          /* foto-textuur cachen op eigen laag */
+    will-change: opacity;              /* fade wordt pure compositing i.p.v. paint */
   }
   #bg-photo.failed { display: none !important; }
 
@@ -220,6 +223,8 @@
     backdrop-filter: blur(10px) saturate(120%);
     -webkit-backdrop-filter: blur(10px) saturate(120%);
     border: 1px solid rgba(255,255,255,0.10);
+    transform: translateZ(0);   /* blur-resultaat cachen op eigen laag */
+    contain: layout;            /* reflow van SVG-update blijft binnen dit blok */
   }
   .spark-head {
     display: flex;
@@ -277,6 +282,8 @@
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
     border: 1px solid rgba(255,255,255,0.12);
+    transform: translateZ(0);   /* blur-resultaat cachen op eigen laag */
+    contain: layout;            /* reflow van forecast-update blijft binnen dit blok */
   }
   .hf-section + .hf-section { margin-top: 0; }
   .hf-divider {
@@ -308,7 +315,7 @@
     box-shadow: 0 4px 18px rgba(0,0,0,0.18);
   }
 
-  .hf-list { display: flex; flex-direction: column; }
+  .hf-list { display: flex; flex-direction: column; contain: layout; }
   .hf-row {
     display: grid;
     grid-template-columns: 50px 28px 1fr auto;
@@ -374,6 +381,8 @@
     backdrop-filter: blur(14px) saturate(120%);
     -webkit-backdrop-filter: blur(14px) saturate(120%);
     border-top: 1px solid rgba(255,255,255,0.08);
+    transform: translateZ(0);   /* grote full-width blur op eigen gecachte laag */
+    contain: layout;            /* hourly/stats-update laat de rest van de pagina niet herschilderen */
   }
 
   .hourly {
@@ -382,6 +391,7 @@
     border-top: 1px solid rgba(255,255,255,0.18);
     border-bottom: 1px solid rgba(255,255,255,0.18);
     padding: 16px 0;
+    contain: layout;            /* herbouw van 9 cellen blijft een lokale reflow */
   }
   .h-cell {
     display: flex;
@@ -429,10 +439,12 @@
   .stats {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
+    contain: layout;            /* tekst-updates per stat blijven binnen de balk */
   }
   .stat {
     padding: 4px 22px;
     border-right: 1px solid rgba(255,255,255,0.10);
+    contain: layout;            /* een gewijzigde waarde reflowt alleen z'n eigen stat */
   }
   .stat:first-child { padding-left: 0; }
   .stat:last-child  { border-right: none; padding-right: 0; }
@@ -1096,7 +1108,7 @@ function renderPrecipChart(probs, amounts) {
 /* === 5-daagse forecast === */
 function renderForecast(daily) {
   const list = $("forecastList");
-  list.innerHTML = "";
+  const frag = document.createDocumentFragment();
 
   // Globale min/max over 5 dagen voor de balkjes
   const allMaxes = [], allMins = [];
@@ -1133,8 +1145,12 @@ function renderForecast(daily) {
       </div>
       <div class="hf-prob">${prob > 0 ? prob + "%" : ""}</div>
     `;
-    list.appendChild(row);
+    frag.appendChild(row);
   }
+
+  // In één keer plaatsen: één reflow i.p.v. vijf losse appends.
+  list.innerHTML = "";
+  list.appendChild(frag);
 }
 
 /* === Render === */
@@ -1162,13 +1178,15 @@ function render(d) {
   /* Hourly: vanaf huidig uur, 9 uur */
   const now = new Date();
   const hourlyEl = $("hourly");
-  hourlyEl.innerHTML = "";
   let baseIdx = w.hourly.time.findIndex(t => {
     const dt = new Date(t);
     return dt.getHours() === now.getHours() && dt.toDateString() === now.toDateString();
   });
   if (baseIdx === -1) baseIdx = 0;
 
+  // Cellen off-DOM in een fragment bouwen en in één keer plaatsen:
+  // één reflow/paint i.p.v. negen losse appends aan de live DOM.
+  const hourlyFrag = document.createDocumentFragment();
   for (let i = 0; i < 9; i++) {
     const idx = baseIdx + i;
     if (!w.hourly.time[idx]) break;
@@ -1187,8 +1205,10 @@ function render(d) {
       <div class="h-temp">${Math.round(w.hourly.temperature_2m[idx])}°</div>
       <div class="h-prob">${prob != null && prob > 0 ? prob + "%" : ""}</div>
     `;
-    hourlyEl.appendChild(cell);
+    hourlyFrag.appendChild(cell);
   }
+  hourlyEl.innerHTML = "";
+  hourlyEl.appendChild(hourlyFrag);
 
   /* Neerslag 24 uur vanaf nu */
   const next24prob = [], next24amt = [];
